@@ -1,0 +1,36 @@
+name: Update PT header
+on:
+  push:
+    paths:
+      - '.github/workflows/update-header.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Update header to PT branding
+        run: |
+          sed -i 's|// @name         IMDb Scout Mod|// @name         IMDb Scout Mod PT|' IMDb_Scout_Mod.user.js
+          sed -i 's|// @namespace    https://github.com/Purfview/IMDb-Scout-Mod|// @namespace    https://github.com/shakesac/IMDb-Scout-Mod-PT|' IMDb_Scout_Mod.user.js
+          sed -i 's|// @updateURL    https://update.greasyfork.org/scripts/407284/IMDb%20Scout%20Mod.meta.js|// @updateURL    https://github.com/shakesac/IMDb-Scout-Mod-PT/raw/master/IMDb_Scout_Mod.user.js|' IMDb_Scout_Mod.user.js
+          sed -i 's|// @downloadURL  https://update.greasyfork.org/scripts/407284/IMDb%20Scout%20Mod.user.js|// @downloadURL  https://github.com/shakesac/IMDb-Scout-Mod-PT/raw/master/IMDb_Scout_Mod.user.js|' IMDb_Scout_Mod.user.js
+          sed -i 's|// @homepage     https://github.com/Purfview/IMDb-Scout-Mod|// @homepage     https://github.com/shakesac/IMDb-Scout-Mod-PT|' IMDb_Scout_Mod.user.js
+          sed -i 's|// @supportURL   https://github.com/Purfview/IMDb-Scout-Mod/issues|// @supportURL   https://github.com/shakesac/IMDb-Scout-Mod-PT/issues|' IMDb_Scout_Mod.user.js
+      - name: Commit and push
+        run: |
+          git config user.name "shakesac"
+          git config user.email "57773575+shakesac@users.noreply.github.com"
+          git add IMDb_Scout_Mod.user.js
+          git commit -m "Update header to PT branding"
+          git push
+      - name: Remove workflow file
+        run: |
+          rm .github/workflows/update-header.yml
+          git add -A
+          git commit -m "cleanup: remove temporary workflow"
+          git push
